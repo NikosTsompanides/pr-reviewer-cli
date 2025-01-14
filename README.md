@@ -1,6 +1,6 @@
 # PR Review CLI Tool
 
-This tool leverages OpenAI to automate the process of reviewing pull requests (PRs) on GitHub. It fetches the diff of a specified PR, analyzes it, and generates a code review in Markdown format, saving valuable time for senior engineers and managers.
+A CLI tool that fetches GitHub PR diffs, analyzes them with OpenAI, and generates a Markdown code review to streamline the review process.
 
 ### Disclaimer
 > This is a Proof of Concept (POC) tool. It is not intended for general use in production environments. Use it at your own risk. The tool is provided "as is" with no warranty, and any feedback or improvements are welcome.
