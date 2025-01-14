@@ -23,11 +23,15 @@ git clone https://github.com/NikosTsompanides/pr-reviewer-cli.git
 ```bash
 npm i
 ```
-3. Create a .env file in the root of the project:
+3. Build the script
+```bash
+npm run build
+```
+4. Create a .env file in the root of the project:
 ```bash
 cp .env.sample .env
 ```
-4. Update the .env file
+5. Update the .env file
 ```plaintext
 GITHUB_TOKEN=<GH_TOKEN>
 OPENAI_API_KEY=<OPENAI_API_KEY>
