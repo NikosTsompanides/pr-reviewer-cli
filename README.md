@@ -1,3 +1,6 @@
+# Blog Post
+[Introducing the PR Review CLI Tool: An Extra Pair of Eyes for Your Code](https://nikos-tsompanidis.com/posts/introducing-the-pr-review-cli-tool-an-extra-pair-of-eyes-for-your-code/)
+
 # PR Review CLI Tool
 
 A CLI tool that fetches GitHub PR diffs, analyzes them with OpenAI, and generates a Markdown code review to streamline the review process.
