@@ -2,26 +2,33 @@
   "name": "pr-reviewer",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/index.js",
+  "main": "dist/cli/index.js",
   "scripts": {
     "type-check": "tsc",
-    "build": "node build.js",
-    "start": "node dist/index.js"
+    "prebuild": "rimraf dist",
+    "build": "node build.js && shx chmod +x dist/mcp-server/index.js",
+    "start": "node dist/cli/index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.10.2",
     "@octokit/rest": "^21.0.2",
     "axios": "^1.7.9",
     "dotenv": "^16.4.7",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.2",
-    "yargs": "^17.7.2"
+    "yargs": "^17.7.2",
+    "zod": "^3.24.3",
+    "zod-to-json-schema": "^3.24.5",
+    "zod-validation-error": "^3.4.0"
   },
   "devDependencies": {
     "@types/node": "^22.10.5",
     "@types/yargs": "^17.0.33",
-    "esbuild": "^0.24.2"
+    "esbuild": "^0.24.2",
+    "rimraf": "^6.0.1",
+    "shx": "^0.4.0"
   }
 }

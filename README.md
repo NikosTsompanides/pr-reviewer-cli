@@ -3,6 +3,7 @@
 A CLI tool that fetches GitHub PR diffs, analyzes them with OpenAI, and generates a Markdown code review to streamline the review process.
 
 ### Disclaimer
+
 > This is a Proof of Concept (POC) tool. It is not intended for general use in production environments. Use it at your own risk. The tool is provided "as is" with no warranty, and any feedback or improvements are welcome.
 
 ## Features
@@ -16,22 +17,31 @@ A CLI tool that fetches GitHub PR diffs, analyzes them with OpenAI, and generate
 ## Installation
 
 1. Clone this repository
+
 ```bash
 git clone https://github.com/NikosTsompanides/pr-reviewer-cli.git
 ```
+
 2. Install the required dependencies:
+
 ```bash
 npm i
 ```
+
 3. Build the script
+
 ```bash
 npm run build
 ```
+
 4. Create a .env file in the root of the project:
+
 ```bash
 cp .env.sample .env
 ```
+
 5. Update the .env file
+
 ```plaintext
 GITHUB_TOKEN=<GH_TOKEN>
 OPENAI_API_KEY=<OPENAI_API_KEY>
@@ -44,22 +54,22 @@ Run the tool with the following command:
 ```bash
 npm run start -- \
   --owner "your-github-username" \
-  --repo "your-repository-name" \ 
+  --repo "your-repository-name" \
   --pr 1234 \
   ### Optional cli options
   --filename "PR_1234_Review" \
-  --folder "./reviews" \ 
+  --folder "./reviews" \
   --override true
 ```
 
 ### CLI Options:
 
-* `--owner` (string): GitHub repository owner (your username or organization).
-* `--repo` (string): GitHub repository name.
-* `--pr` (number): Pull request number to review.
-* `--filename` (string/ **optional**): Name for the generated review file (default: PR_<pr_number>_Review).
-* `--folder` (string / **optional**): Folder where the review file will be saved (default: ./reviews).
-* `--override` (boolean / **optional**): Whether to overwrite existing review files (default: false).
+- `--owner` (string): GitHub repository owner (your username or organization).
+- `--repo` (string): GitHub repository name.
+- `--pr` (number): Pull request number to review.
+- `--filename` (string/ **optional**): Name for the generated review file (default: PR\_<pr_number>\_Review).
+- `--folder` (string / **optional**): Folder where the review file will be saved (default: ./reviews).
+- `--override` (boolean / **optional**): Whether to overwrite existing review files (default: false).
 
 ### How It Works
 
@@ -73,6 +83,26 @@ npm run start -- \
 - Enhance the AI’s ability to handle more complex review scenarios.
 - Add more customizable options, like review categories (e.g., performance, security, etc.).
 - Implement more advanced error handling and logging features.
+
+### MCP Client Setup
+
+Setting up the MCP server is straightforward. All you need to do is clone the repository, build the code, and add our MCP server to your client’s configuration.
+
+```json
+{
+  "mcpServers": {
+    "pr-reviewer-mcp": {
+      "command": "npx",
+      "args": ["-y", "absolute/path/to/pr-reviewer/mcp-server/dist/index.js"],
+      "env": {
+        "PATH": "<path_to_your_node_bin>",
+        "GITHUB_TOKEN": "<your_github_token_here>",
+        "OPENAI_API_KEY": "your_open_ai_api_key_here"
+      }
+    }
+  }
+}
+```
 
 ### Contributing
 

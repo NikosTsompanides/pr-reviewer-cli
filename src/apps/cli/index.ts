@@ -1,18 +1,22 @@
 import fs from "fs/promises";
 import path from "path";
 import dotenv from "dotenv";
-import { createOpenAIClient, fetchGPTResult } from "./utils/openAPIClient";
-import { createGithubCLient, fetchPRDiff } from "./utils/githubClient";
 import { getCLIOptions } from "./utils/cli";
 import { createFolderIfNotExists, getFilenames } from "./utils/fileSystem";
-import { trimDiff } from "./utils/trimDiff";
+import { CLIOptions } from "./models";
+import { createGithubClient, createOpenAIClient } from "../../clients";
+import { generateReview } from "../../modules/pr-reviewer";
+import { EnvVariables } from "../../models";
 
-dotenv.config();
+dotenv.config({ path: path.join(__dirname, "../../.env") });
 
 const DEFAULT_REVIEWS_FOLDER = "./reviews";
 
 async function main() {
   try {
+    const { GITHUB_TOKEN, OPENAI_API_KEY } = EnvVariables.parse(process.env);
+
+    const options = getCLIOptions();
     const {
       owner,
       repo,
@@ -20,22 +24,7 @@ async function main() {
       filename = `PR_${pr}_Review`,
       folder = DEFAULT_REVIEWS_FOLDER,
       override = false,
-    } = getCLIOptions();
-
-    const githubToken = process.env.GITHUB_TOKEN as string;
-    const openaiApiKey = process.env.OPENAI_API_KEY as string;
-
-    if (!githubToken) {
-      console.error(
-        '[ERROR] Undefined "GITHUB_TOKEN" env variable. Please provide one in the .env file'
-      );
-    }
-
-    if (!openaiApiKey) {
-      console.error(
-        '[ERROR] Undefined "OPENAI_API_KEY" env variable. Please provide one in the .env file'
-      );
-    }
+    } = CLIOptions.parse(options);
 
     // Create the folder to store the reviews if not exists.
     const folderPath = path.join(process.cwd(), folder);
@@ -52,15 +41,13 @@ async function main() {
       return;
     }
 
-    const openAIClient = createOpenAIClient(openaiApiKey);
-    const githubClient = createGithubCLient(githubToken);
+    const openAIClient = createOpenAIClient(OPENAI_API_KEY);
+    const githubClient = createGithubClient(GITHUB_TOKEN);
 
-    console.info("[INFO] Fetching PR diff...");
-    const diff = await fetchPRDiff(owner, repo, pr, githubClient);
-    const trimmedDiff = trimDiff(diff, 500);
-
-    console.info("[INFO] Fetching GPT Result...");
-    const review = await fetchGPTResult(trimmedDiff, openAIClient);
+    const review = generateReview(
+      { pr, owner, repo },
+      { openAIClient, githubClient, logger: console }
+    );
 
     const filePath = path.join(process.cwd(), folder, `${filename}.md`);
     console.info(`[INFO] Writing review to ${filePath}...`);

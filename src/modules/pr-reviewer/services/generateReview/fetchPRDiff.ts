@@ -1,8 +1,9 @@
 import { Octokit } from "@octokit/rest";
-import { GithubClientError } from "../errors";
+import { GithubClientError } from "../../../../clients/githubClient";
+import type { ReviewDetails } from "../../../../models";
 
-export const createGithubCLient = (authToken: string) =>
-  new Octokit({ auth: authToken });
+type FetchPRDiffProps = ReviewDetails.ReviewDetails;
+type FetchPRDiffDeps = { client: Octokit };
 
 /**
  * Fetch the diff of a pull request from GitHub.
@@ -14,14 +15,15 @@ export const createGithubCLient = (authToken: string) =>
  * @throws GithubClientError
  */
 export async function fetchPRDiff(
-  owner: string,
-  repo: string,
-  prNumber: number,
-  client: Octokit
+  props: FetchPRDiffProps,
+  deps: FetchPRDiffDeps
 ): Promise<string> {
   try {
+    const { owner, repo, pr } = props;
+    const { client } = deps;
+
     const { data: diff } = await client.request(
-      `GET /repos/${owner}/${repo}/pulls/${prNumber}`,
+      `GET /repos/${owner}/${repo}/pulls/${pr}`,
       {
         headers: { accept: "application/vnd.github.v3.diff" },
       }

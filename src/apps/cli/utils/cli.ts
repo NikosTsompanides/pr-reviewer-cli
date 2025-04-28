@@ -1,15 +1,6 @@
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 
-type CLIOptions = {
-  owner: string;
-  repo: string;
-  pr: number;
-  filename?: string;
-  folder?: string;
-  override?: boolean;
-};
-
 export const getCLIOptions = () =>
   yargs(hideBin(process.argv))
     .option("owner", {
@@ -39,4 +30,4 @@ export const getCLIOptions = () =>
       describe: "Override an existing review",
       type: "boolean",
     })
-    .help().argv as CLIOptions;
+    .help().argv as Record<string, unknown>;

@@ -1,5 +1,8 @@
 import fs from "fs/promises";
-import { FileSystemError } from "../errors";
+
+class FileSystemError extends Error {
+  name = "FileSystemError" as const;
+}
 
 export const getFilenames = async (folderPath: string) => {
   try {
